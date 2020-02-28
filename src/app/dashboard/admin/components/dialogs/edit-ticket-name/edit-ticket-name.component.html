@@ -1,0 +1,20 @@
+<h4 mat-dialog-title>
+  Edytuj nazwę
+</h4>
+<form [formGroup]="ticketForm" (submit)="save()" class="w-550">
+  <input type="hidden" formControlName="id">
+  <div fxFlex="100" fxLayout="row wrap">
+    <mat-form-field fxFlex="100" fxFlex.gt-sm="calc(50% - 10px)">
+      <mat-label>Rodzaj biletu</mat-label>
+      <input type="text" matInput formControlName="name" [required]>
+    </mat-form-field>
+  </div>
+  <mat-dialog-actions fxFlex="100">
+    <button type="submit" color="primary" [disabled]="ticketForm.invalid" mat-raised-button>
+      Zapisz
+    </button>
+    <button type="button" color="warn" mat-button mat-dialog-close>
+      Anuluj
+    </button>
+  </mat-dialog-actions>
+</form>

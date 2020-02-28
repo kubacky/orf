@@ -1,0 +1,37 @@
+<div class="full-bgd"></div>
+<div fxLayout="row wrap" fxLayoutAlign="center start">
+  <div fxFlex="100" class="t-center m-t-10" [ngClass.gt-sm]="'m-t-40'">
+    <img src="../../assets/img/orf.png" [ngClass.lt-md]="'img-small'" alt="Ostróda Reggae Festival logo" class="m-b-20">
+  </div>
+
+  <mat-card class="register-box m-b-40" fxFlex.gt-xs="80" fxFlex.gt-sm="70" fxLayout="row wrap" *ngIf="tickets">
+    <div fxFlex="100" class="t-center" [ngClass.gt-sm]="'t-right'">
+      <orf-profile-button [full-height]="false"></orf-profile-button>
+      <mat-divider class="m-t-20"></mat-divider>
+    </div>
+    <form [formGroup]="registerForm" fxFlex="100" *ngIf="tickets.length > 0" (submit)="save()" class="p-t-10" [ngClass.gt-sm]="'p-t-20'">
+      <orf-members-list [members]="registerForm.get('members')" [tickets]="tickets" fxFlex="100"></orf-members-list>
+      <div fxFlex="100" class="m-t-20 m-b-20">
+        <mat-checkbox formControlName="agreement">oświadczam, że zgłaszane przeze mnie osoby wyrażają zgodę na przetwarzanie danych osobowych przez Positive Music
+          Promotion
+          <br>
+          <small>I declare that the persons I have added consent to the processing of their personal data by Positive Music Promotion</small>
+        </mat-checkbox>
+      </div>
+      <div fxFlex="100" class="m-t-20 m-b-20 t-center">
+        <button mat-raised-button color="primary" [disabled]="!isFormComplete()">
+          Wyślij /
+          <small>Send</small>
+        </button>
+      </div>
+    </form>
+    <div class="t-center" *ngIf="tickets.length === 0" fxFlex="100">
+      <img src="../../assets/img/error.svg" alt="Błąd" class="w-100 m-t-50">
+      <h4 class="m-t-40">
+        Dla Twojego konta nie dodano jeszcze żadnego rodzaju biletów
+        <br>
+        <small>There is no type of tickets added for Your account yet</small>
+      </h4>
+    </div>
+  </mat-card>
+</div>

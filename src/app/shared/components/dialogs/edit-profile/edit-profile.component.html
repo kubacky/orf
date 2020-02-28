@@ -1,0 +1,41 @@
+<h4 mat-dialog-title>
+  Edytuj profil /
+  <small>Edit profile</small>
+</h4>
+<form [formGroup]="userForm" (submit)="saveUser()" class="w-550" [ngClass.gt-md]="'w-800'" *ngIf="userForm">
+  <div fxFlex="100" fxLayout="row wrap">
+    <div fxFlex="100" fxLayout="row wrap" fxLayoutGap="10px">
+      <mat-form-field fxFlex="100" fxFlex.gt-sm="calc(50% - 10px)">
+        <mat-label>Imię i nazwisko</mat-label>
+        <input type="text" matInput formControlName="name" [required]>
+        <mat-hint>Full name</mat-hint>
+      </mat-form-field>
+      <mat-form-field fxFlex="100" fxFlex.gt-sm="calc(50% - 10px)">
+        <mat-label>Adres e-mail</mat-label>
+        <input type="email" matInput formControlName="email" [required]>
+        <mat-hint>E-mail address</mat-hint>
+      </mat-form-field>
+    </div>
+
+    <div fxFlex="100" class="m-t-40" fxLayout="row wrap" fxLayoutGap="10px">
+      <mat-form-field fxFlex="100" fxFlex.gt-sm="calc(50% - 10px)">
+        <mat-label>Hasło</mat-label>
+        <input type="password" matInput formControlName="password" [required]>
+        <mat-hint>Password</mat-hint>
+      </mat-form-field>
+      <mat-form-field fxFlex="100" fxFlex.gt-sm="calc(50% - 10px)">
+        <mat-label>Potwierdź hasło</mat-label>
+        <input type="password" matInput formControlName="confirmPassword" [required]>
+        <mat-hint>Repeat password</mat-hint>
+      </mat-form-field>
+    </div>
+  </div>
+  <mat-dialog-actions fxFlex="100">
+    <button type="submit" color="primary" [disabled]="userForm.invalid" mat-raised-button>
+      Zapisz
+    </button>
+    <button type="button" color="warn" mat-button mat-dialog-close>
+      Anuluj
+    </button>
+  </mat-dialog-actions>
+</form>

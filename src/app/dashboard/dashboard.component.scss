@@ -1,0 +1,10 @@
+mat-sidenav-container {
+  min-height: 100vh;
+  mat-sidenav {
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+  }
+  mat-sidenav-content {
+    font-weight: 300;
+    min-height: 100vh;
+  }
+}

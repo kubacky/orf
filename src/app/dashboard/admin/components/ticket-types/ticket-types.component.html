@@ -1,0 +1,69 @@
+<div class="p-20" fxFlex fxLayout="row wrap" *ngIf="categories">
+  <div fxFlex="100" fxLayout="row wrap">
+    <div fxFlex.gt-sm="250px">
+
+    </div>
+    <div class="applicant-type" fxFlex *ngFor="let cat of categories">
+      <img [src]="'/assets/img/' + cat.icon + '.svg'" [alt]="cat.name">
+      <p>
+        <small>{{ cat.name }}</small>
+      </p>
+    </div>
+  </div>
+  <div fxFlex="100" fxLayout="row" *ngFor="let ticket of tickets">
+    <mat-divider></mat-divider>
+    <div fxFlex.gt-sm="250px" class="p-t-15 p-b-15 t-right">
+      <button mat-icon-button color="warn" matTooltip="Usuń" (click)="delete(ticket)">
+        <mat-icon>
+          delete
+        </mat-icon>
+      </button>
+      <span class="pointer" matTooltip="Edytuj" (click)="editName(ticket)">
+        {{ ticket.name }}
+      </span>
+    </div>
+    <div fxFlex fxFlex.lt-sm="calc(33% - 10px)" class="t-center p-t-15 p-b-15" *ngFor="let cat of ticket.assoc">
+      <button type="button" mat-icon-button (click)="editValue(ticket, cat)">
+        <mat-icon *ngIf="cat.value" class="t-green">
+          checked
+        </mat-icon>
+        <mat-icon *ngIf="!cat.value" class="t-red">
+          close
+        </mat-icon>
+      </button>
+    </div>
+  </div>
+  <form [formGroup]="ticketForm" (submit)="saveTicket()" fxFlex fxLayout="row wrap" *ngIf="isCreated()">
+    <input type="hidden" formControlName="active">
+    <div fxFlex="100" fxLayout="row wrap">
+      <mat-divider></mat-divider>
+      <div fxFlex.gt-sm="250px" fxLayout="row">
+        <mat-form-field fxFlex="100">
+          <input type="text" matInput formControlName="name" placeholder="Rodzaj biletu">
+        </mat-form-field>
+      </div>
+      <div fxFlex fxLayout="row" formGroupName="for">
+        <div class="t-center m-t-15" fxFlex *ngFor="let cat of categories">
+          <mat-checkbox [formControlName]="cat._id"></mat-checkbox>
+        </div>
+      </div>
+    </div>
+    <div fxFlex="100" fxLayout="row" *ngIf="isCreated()">
+      <div fxFlex="250px" class="t-right">
+        <button type="button" mat-mini-fab color="warn" matTooltip="Anuluj" (click)="cancelCreating()" class="m-r-20">
+          <mat-icon>close</mat-icon>
+        </button>
+        <button type="submit" mat-fab color="primary" matTooltip="Zapisz" [disabled]="ticketForm.invalid">
+          <mat-icon>save</mat-icon>
+        </button>
+      </div>
+    </div>
+  </form>
+  <div fxFlex="100" fxLayout="row" *ngIf="!isCreated()">
+    <div fxFlex="250px" class="t-right">
+      <button type="button" mat-fab color="accent" matTooltip="Utwórz bilet" (click)="createTicket()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,81 @@
+<h4 mat-dialog-title *ngIf="isEdited()">
+  Edycja użytkownika
+</h4>
+<h4 mat-dialog-title *ngIf="!isEdited()">
+  Dodaj użytkownika
+</h4>
+<form [formGroup]="userForm" (submit)="saveUser()" class="w-550" [ngClass.gt-md]="'w-900'" *ngIf="categories">
+  <mat-dialog-content>
+    <div fxFlex="100" fxLayout="row wrap">
+      <div fxFlex="100" fxLayout="row wrap" fxLayoutGap="10px" class="m-t-20">
+        <mat-form-field fxFlex="100" fxFlex.gt-sm="calc(40% - 10px)">
+          <mat-select formControlName="permissions" placeholder="Uprawnienia">
+            <mat-option value="user">Zwykły użytkownik (zespół, sponsor itp)</mat-option>
+            <mat-option value="operator">Kasa</mat-option>
+            <mat-option value="moderator">Moderator</mat-option>
+            <mat-option value="admin">Administrator</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field fxFlex="50" fxFlex.gt-sm="calc(12% - 10px)" *ngIf="userForm.get('permissions').value === 'user'">
+          <mat-label>Limit biletów</mat-label>
+          <input type="number" matInput formControlName="limit" [required]>
+        </mat-form-field>
+        <div fxFlex="30" fxLayout="row wrap">
+          <mat-checkbox formControlName="active" color="primary" class="m-t-15 m-l-30">aktywny</mat-checkbox>
+        </div>
+      </div>
+      <div formGroupName="canManage" fxFlex="100" fxLayout="row wrap" *ngIf="userForm.get('permissions').value === 'moderator'">
+        <div fxFlex="100">
+          <h5 class="m-t-10 m-b-10">Bilety do dyspozycji:</h5>
+        </div>
+        <div fxFlex fxLayout="row" *ngFor="let cat of categories">
+          <mat-checkbox [formControlName]="cat._id"> <small>{{ cat.name }}</small></mat-checkbox>
+        </div>
+      </div>
+      <div fxFlex="100" fxLayout="row wrap" fxLayoutGap="10px" class="m-t-20" *ngIf="userForm.get('permissions').value === 'user'">
+        <mat-form-field fxFlex="100" fxFlex.gt-sm="calc(25% - 10px)">
+          <mat-select formControlName="type" placeholder="Rodzaj">
+            <mat-option *ngFor="let cat of cateories" [value]="cat.name">{{ cat.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field fxFlex="100" fxFlex.gt-sm="calc(70% - 10px)">
+          <mat-label>Nazwa zespołu / firmy</mat-label>
+          <input type="text" matInput formControlName="company" [required]>
+        </mat-form-field>
+      </div>
+
+      <div fxFlex="100" fxLayout="row wrap" fxLayoutGap="10px" class="m-t-20">
+        <mat-form-field fxFlex="100" fxFlex.gt-sm="calc(50% - 10px)">
+          <mat-label>Imię i nazwisko</mat-label>
+          <input type="text" matInput formControlName="name" [required]>
+        </mat-form-field>
+        <mat-form-field fxFlex="100" fxFlex.gt-sm="calc(50% - 10px)">
+          <mat-label>Adres e-mail</mat-label>
+          <input type="email" matInput formControlName="email" [required]>
+        </mat-form-field>
+      </div>
+
+      <div fxFlex="100" fxLayout="row wrap" fxLayoutGap="10px" class="m-t-20">
+        <mat-form-field fxFlex="100" fxFlex.gt-sm="calc(50% - 10px)">
+          <mat-label>Hasło</mat-label>
+          <input type="password" matInput formControlName="password" [required]>
+        </mat-form-field>
+        <mat-form-field fxFlex="100" fxFlex.gt-sm="calc(50% - 10px)">
+          <mat-label>Potwierdź hasło</mat-label>
+          <input type="password" matInput formControlName="confirmPassword" [required]>
+        </mat-form-field>
+      </div>
+      <div fxFlex="100" fxLayout="row wrap" fxLayoutGap="10px" class="m-t-20 m-b-40">
+        <mat-checkbox color="primary" formControlName="agreement">zgoda na przetwarzanie danych osobowych</mat-checkbox>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions fxFlex="100">
+    <button type="submit" color="primary" [disabled]="userForm.invalid || !userForm.get('agreement').value" mat-raised-button>
+      Zapisz
+    </button>
+    <button type="button" color="warn" mat-button mat-dialog-close>
+      Anuluj
+    </button>
+  </mat-dialog-actions>
+</form>

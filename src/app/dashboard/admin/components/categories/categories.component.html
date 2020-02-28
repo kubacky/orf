@@ -1,0 +1,15 @@
+<div class="p-20" fxFlex fxLayout="row wrap" *ngIf="categories">
+  <div fxFlex="100px" fxLayoutAlign="center center">
+    <button mat-mini-fab color="primary" (click)="editCategory(false)">
+      <mat-icon>
+        add
+      </mat-icon>
+    </button>
+  </div>
+  <div class="category" fxFlex fxFlex.lt-sm="calc(33% - 10px)" *ngFor="let cat of categories" (click)="editCategory(cat)">
+    <img [src]="'/assets/img/' + cat.icon + '.svg'" [alt]="cat.name">
+    <p>
+      <small>{{ cat.name }}</small>
+    </p>
+  </div>
+</div>

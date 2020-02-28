@@ -1,0 +1,51 @@
+<div fxFlex="100" fxLayout="row wrap" fxLayoutGap="10px" formArray="members">
+  <div fxFlex="100">
+    <h4>Zgłaszane osoby <span *ngIf="userLimit">- przydzielony limit: {{ userLimit }}</span> /
+      <small>
+        People You want to add <span *ngIf="userLimit">- assigned limit: {{ userLimit }}</span>
+      </small>
+    </h4>
+  </div>
+  <div fxFlex="100" *ngIf="members.value.length === 0">
+    <h5>Lista jest pusta /
+      <small>Your list is empty</small>
+    </h5>
+  </div>
+  <div fxFlex="100">
+    <div *ngFor="let member of members.controls; let i = index" [formGroup]="members.controls[i]" fxLayout="row wrap"
+      fxLayoutGap="10px">
+      <div class="t-center" fxFlex="100" fxFlex.gt-sm="40px">
+        <button class="p-t-10" type="button" mat-icon-button matTooltip="Usuń / Remove" color="warn" (click)="members.removeAt(i)" [disabled]="members.controls[i].disabled">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <mat-form-field fxFlex="100" fxFlex>
+        <mat-label>Imię i nazwisko / Full name</mat-label>
+        <input type="text" formControlName="name" [required]="true" matInput>
+      </mat-form-field>
+      <mat-form-field fxFlex="100" fxFlex.gt-sm="30" >
+        <mat-label>Rodzaj biletu / Ticket type</mat-label>
+        <input matInput type="text" formControlName="type" *ngIf="tickets.length === 1">
+        <mat-select formControlName="type" *ngIf="tickets.length > 1" [required]="true">
+          <mat-option *ngFor="let ticket of tickets" [value]="ticket.name">
+            {{ ticket.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field fxFlex="100" fxFlex.gt-sm="25">
+        <mat-label>Informacje dodatkowe</mat-label>
+        <input type="text" formControlName="role" matInput [required]="true">
+      </mat-form-field>
+    </div>
+    <div fxFlex="100" class="t-right" *ngIf="members.controls.length > 0 && userLimit > 0">
+     <small>
+         {{ members.controls.length }} / {{ userLimit }}
+     </small>
+    </div>
+  </div>
+  <div fxFlex="100" class="m-t-10 m-b-10">
+    <button (click)="addMember()" type="button" matTooltip="Dodaj kolejną osobę / Add another member" mat-fab color="accent">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+</div>

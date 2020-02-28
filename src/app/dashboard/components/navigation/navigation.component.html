@@ -1,0 +1,40 @@
+<nav>
+  <ul>
+    <li routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+      <a routerLink="/dashboard">
+        <i class="la la-ticket"></i>
+        Bilety
+      </a>
+    </li>
+    <li *ngIf="isModerator()" routerLinkActive="active">
+      <a routerLink="/dashboard/moderator/lists">
+        <i class="la la-bars"></i>
+        Listy
+      </a>
+    </li>
+    <li *ngIf="isAdmin()" routerLinkActive="active">
+      <a routerLink="/dashboard/admin/users">
+        <i class="la la-users"></i>
+        Użytkownicy
+      </a>
+    </li>
+    <li *ngIf="isAdmin()" routerLinkActive="active">
+      <a routerLink="/dashboard/admin/settings">
+        <i class="la la-cogs"></i>
+        Ustawienia
+      </a>
+    </li>
+    <li *ngIf="isAdmin()" routerLinkActive="active">
+      <a routerLink="/dashboard/admin/charts">
+        <i class="la la-line-chart"></i>
+        Statystyki
+      </a>
+    </li>
+    <li *ngIf="isAdmin()" routerLinkActive="active">
+      <a routerLink="/dashboard/admin/summary">
+        <i class="la la-check-circle"></i>
+        Podsumowanie
+      </a>
+    </li>
+  </ul>
+</nav>

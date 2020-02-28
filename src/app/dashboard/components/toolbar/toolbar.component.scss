@@ -1,0 +1,11 @@
+mat-toolbar {
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+  .toolbar-separator {
+    height: 64px;
+    width: 1px;
+    background: rgba(0, 0, 0, .1);
+  }
+  .f-h {
+    height: 64px;
+  }
+}

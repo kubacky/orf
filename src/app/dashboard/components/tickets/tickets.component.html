@@ -1,0 +1,112 @@
+<div class="page-background bg-blue"></div>
+<div fxLayout="row wrap" fxLayoutAlign="center">
+  <div class="p-t-20 p-b-20 p-l-10 p-r-10" fxFlex="100" fxFlex.sm="95" fxFlex.gt-sm="90" fxLayout="column" fxLayout.gt-sm="row"
+    fxLayoutAlign="space-between center">
+
+    <!-- controls -->
+    <div fxFlex="100" fxFlex.gt-sm="200px">
+      <button type="button" class="m-r-20" color="accent" (click)="issuing()" mat-fab matTooltip="Wydaj bilety" [disabled]="selection.selected.length === 0">
+        <mat-icon>bookmark</mat-icon>
+      </button>
+      <button type="button" class="m-r-20" mat-mini-fab *ngIf="isModerator" color="accent" (click)="return()" matTooltip="Cofnij wydany bilet" [disabled]="checkTicketsType(2)">
+        <mat-icon>cached</mat-icon>
+      </button>
+      <button type="button" mat-mini-fab color="warn" *ngIf="isAdmin" (click)="delete()" matTooltip="Usuń" [disabled]="selection.selected.length === 0">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+    <!-- /controls -->
+
+    <!-- filter -->
+    <mat-form-field fxFlex>
+      <input matInput (keyup)="applyFilter($event.target.value); $event.stopPropagation()" placeholder="Szukaj">
+    </mat-form-field>
+    <!-- /filter -->
+  </div>
+
+  <!-- spinner -->
+  <mat-card class="t-center p-t-50 p-b-50" fxFlex="100" fxFlex.gt-sm="90" fxLayout="row" fxLayoutAlign="center center" *ngIf="spinner">
+    <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+  </mat-card>
+  <!-- /spinner -->
+
+  <!-- table -->
+  <mat-card class="p-0 m-b-40" fxFlex="100" fxFlex.gt-sm="90" fxLayout="row wrap" [hidden]="spinner">
+
+    <mat-table [dataSource]="members" fxFlex="100" matSort>
+
+      <!-- select -->
+      <ng-container matColumnDef="selected">
+        <mat-header-cell *matHeaderCellDef fxFlex="70px">
+          {{ selection.selected.length }}
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row" class="mat-column-select" fxFlex="70px">
+          <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selectRow(row, true) : null" [checked]="selection.isSelected(row)"
+            *ngIf="row.status === 1 || row.status === 2 || isAdmin; else disabled">
+          </mat-checkbox>
+          <ng-template #disabled>
+            <mat-checkbox #disableSelect [disabled]="true">
+            </mat-checkbox>
+          </ng-template>
+        </mat-cell>
+      </ng-container>
+      <!-- .select -->
+
+      <!-- member.status -->
+      <ng-container matColumnDef="status">
+        <mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="60px"> Status </mat-header-cell>
+        <mat-cell *matCellDef="let element" fxFlex="60px">
+          <div [ngSwitch]="element.status">
+            <mat-icon *ngSwitchCase="0" matTooltip="Oczekuje" class="t-dark-gray">
+              access_time
+            </mat-icon>
+            <mat-icon *ngSwitchCase="1" matTooltip="Zaakceptowany" class="t-green">
+              done
+            </mat-icon>
+            <mat-icon *ngSwitchCase="2" matTooltip="Wydano bilet" class="t-blue">
+              redo
+            </mat-icon>
+            <mat-icon *ngSwitchCase="9" matTooltip="Odrzucony" class="t-red">
+              remove_circle_outline
+            </mat-icon>
+          </div>
+        </mat-cell>
+      </ng-container>
+      <!-- member.status -->
+
+      <!-- member.name -->
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Imię i nazwisko </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+      </ng-container>
+      <!-- /member.name -->
+
+      <!-- member.ticket -->
+      <ng-container matColumnDef="ticket">
+        <mat-header-cell *matHeaderCellDef fxFlex="200px" mat-sort-header> Bilet </mat-header-cell>
+        <mat-cell *matCellDef="let element" fxFlex="200px"> {{element.ticket}} </mat-cell>
+      </ng-container>
+      <!-- /member.ticket -->
+
+      <!-- member.ticket -->
+      <ng-container matColumnDef="role">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Informacje dodatkowe </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.role }} </mat-cell>
+      </ng-container>
+      <!-- /member.ticket -->
+
+      <!-- member.list -->
+      <ng-container matColumnDef="list">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="m-l-20">Lista</span> </mat-header-cell>
+        <mat-cell *matCellDef="let element"> <span class="m-l-20">{{element.list}}</span></mat-cell>
+      </ng-container>
+      <!-- member.list -->
+
+      <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: columns;" (click)="selectRow(row, false)" class="pointer"></mat-row>
+    </mat-table>
+    <mat-paginator #paginator [pageSize]="30" [pageSizeOptions]="[30, 90, 180]" [showFirstLastButtons]="true">
+    </mat-paginator>
+  </mat-card>
+  <!-- /table -->
+</div>

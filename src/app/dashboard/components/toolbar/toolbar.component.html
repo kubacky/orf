@@ -1,0 +1,11 @@
+<mat-toolbar>
+  <button mat-icon-button type="button" (click)="sidenav.toggle()">
+    <i [ngClass]="{'la la-angle-left': true, 'reverse': !sidenav.opened}"></i>
+  </button>
+  <div>
+    <button mat-button>Artur Kubacki | 608 521 585</button>
+  </div>
+  <div class="spacer"></div>
+  <div class="toolbar-separator"></div>
+  <orf-profile-button [full-height]="true"></orf-profile-button>
+</mat-toolbar>

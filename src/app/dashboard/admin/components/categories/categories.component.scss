@@ -1,0 +1,16 @@
+.category {
+  text-align: center;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  padding-top: 15px;
+  transition: ease-in 0.2s;
+  img {
+    width: 30%;
+  }
+}
+
+.category:hover {
+  cursor: pointer;
+  transition: ease-out 0.2s;
+  background: #eee;
+}

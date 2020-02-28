@@ -1,0 +1,35 @@
+<div class="full-bgd"></div>
+
+<div class="f-h-wrapper" fxLayout="row" fxFill fxLayoutAlign="center center">
+  <mat-card class="register-box t-center" fxFlex="90" fxFlex.gt-xs="60" fxFlex.md="50" fxFlex.gt-md="30">
+    <form (submit)="login()" [formGroup]="loginForm" fxLayout="row wrap">
+      <div fxFlex="100">
+        <img src="../../../assets/img/orf.png" alt="Ostróda Reggae Festival logo" class="m-b-20">
+        <p>
+          Zaloguj się /
+          <small>Sign In</small>
+        </p>
+      </div>
+      <mat-form-field fxFlex="100" appearance="outline">
+        <mat-label>E-mail</mat-label>
+        <input type="email" matInput formControlName="email">
+      </mat-form-field>
+      <mat-form-field fxFlex="100" appearance="outline">
+        <mat-label>Hasło / Password</mat-label>
+        <input type="password" matInput formControlName="password">
+      </mat-form-field>
+      <div fxFlex="100">
+        <h5>
+          Nie masz konta? /
+          <small>Don't have an account?</small>
+          <a routerLink="/" class="p-l-5">Zarejestruj się / Sign up</a>
+        </h5>
+      </div>
+      <div fxFlex="100" class="m-t-30">
+        <button type="submit" [disabled]="loginForm.invalid" mat-raised-button color="primary">
+          Login
+        </button>
+      </div>
+    </form>
+  </mat-card>
+</div>

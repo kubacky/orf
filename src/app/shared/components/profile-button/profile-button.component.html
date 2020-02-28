@@ -1,0 +1,10 @@
+<button [ngClass]="{'f-h' : fullHeight}" mat-button [matMenuTriggerFor]="menu">
+  {{ username }}
+  <mat-icon>perm_identity</mat-icon>
+</button>
+<mat-menu #menu="matMenu">
+  <button mat-menu-item (click)="editProfile()">
+    <mat-icon>perm_identity</mat-icon> Profil</button>
+  <button mat-menu-item (click)="logout()">
+    <mat-icon>exit_to_app</mat-icon> Wyloguj</button>
+</mat-menu>

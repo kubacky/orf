@@ -1,0 +1,85 @@
+<h5 mat-dialog-title *ngIf="list">
+  {{ list.owner.company }} /
+  <small class="t-dark-gray">{{ list.owner.name }}</small>
+</h5>
+<div class="w-550" [ngClass.md]="'w-800'" [ngClass.gt-md]="'w-900'" *ngIf="list">
+  <mat-dialog-content fxFlex="100" fxLayout="row wrap">
+    <mat-table #table [dataSource]="members" fxFlex="100">
+      <!-- select -->
+      <ng-container matColumnDef="select" *ngIf="!isModerator()">
+        <mat-header-cell *matHeaderCellDef class="mat-column-select" fxFlex="70px">
+          <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()">
+          </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row" class="mat-column-select" fxFlex="70px">
+          <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selectRow(row, true) : null" [checked]="selection.isSelected(row)"
+            *ngIf="row.status !== 2">
+          </mat-checkbox>
+          <mat-checkbox (click)="$event.stopPropagation()" matTooltip="Bilet został już wydany" [disabled]="true" *ngIf="row.status === 2">
+          </mat-checkbox>
+        </mat-cell>
+      </ng-container>
+      <!-- .select -->
+
+      <!-- member.name -->
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef> Imię i nazwisko </mat-header-cell>
+        <mat-cell *matCellDef="let element" [ngClass]="{'t-dark-gray': element.status === 2}">
+          {{ element.name }}
+        </mat-cell>
+      </ng-container>
+      <!-- member.name -->
+
+      <!-- member.role -->
+      <ng-container matColumnDef="role">
+        <mat-header-cell *matHeaderCellDef> Informacje dodatkowe </mat-header-cell>
+        <mat-cell *matCellDef="let element" [ngClass]="{'t-dark-gray': element.status === 2}">
+          {{ element.role }}
+        </mat-cell>
+      </ng-container>
+      <!-- /member.role -->
+
+      <!-- member.ticket -->
+      <ng-container matColumnDef="ticket">
+        <mat-header-cell *matHeaderCellDef> Rodzaj biletu </mat-header-cell>
+        <mat-cell *matCellDef="let element" [ngClass]="{'t-dark-gray': element.status === 2}">
+          {{ element.ticketType }}
+        </mat-cell>
+      </ng-container>
+      <!-- /member.ticket -->
+
+      <!-- member.status -->
+      <ng-container matColumnDef="status">
+        <mat-header-cell *matHeaderCellDef fxFlex="100px"> Status </mat-header-cell>
+        <mat-cell *matCellDef="let element" [ngClass]="{'t-dark-gray': element.status === 2}" fxFlex="100px">
+          <small *ngIf="element.status === 0">oczekujący</small>
+          <small *ngIf="element.status === 1" class="t-green">zaakceptowany</small>
+          <small *ngIf="element.status === 2">bilet wydany</small>
+          <small *ngIf="element.status === 9" class="t-red">odrzucony</small>
+        </mat-cell>
+      </ng-container>
+      <!-- /member.status -->
+
+      <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: columns;" (click)="selectRow(row)" class="pointer"></mat-row>
+    </mat-table>
+  </mat-dialog-content>
+  <mat-dialog-actions fxFlex="100" *ngIf="!isModerator()">
+    <button type="submit" color="primary" [disabled]="selection.selected.length === 0" [mat-dialog-close]="{action: 'accept', members: selection.selected}"
+      mat-raised-button>
+      Zatwierdź
+    </button>
+    <button type="submit" color="warn" [disabled]="selection.selected.length === 0" [mat-dialog-close]="{action: 'reject', members: selection.selected}"
+      mat-raised-button>
+      Odrzuć
+    </button>
+    <button type="button" color="accent" mat-button mat-dialog-close>
+      Anuluj
+    </button>
+  </mat-dialog-actions>
+  <mat-dialog-actions fxFlex="100" *ngIf="isModerator()">
+    <button type="button" color="accent" mat-button mat-dialog-close>
+      Zamknij
+    </button>
+  </mat-dialog-actions>
+</div>

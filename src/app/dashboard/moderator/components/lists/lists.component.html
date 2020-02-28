@@ -1,0 +1,112 @@
+<div class="page-background bg-yellow"></div>
+<div fxLayout="row wrap" fxLayoutAlign="center">
+  <div class="p-t-20 p-b-20 p-l-10 p-r-10" fxFlex="100" fxFlex.md="95" fxFlex.gt-md="90" fxLayout="column" fxLayout.gt-sm="row"
+    fxLayoutAlign="space-between center">
+
+    <!-- controls -->
+    <div fxFlex="100" fxFlex.gt-sm="200px">
+      <button type="button" routerLink="/dashboard/moderator/list/create" class="m-r-20" color="primary" mat-fab matTooltip="Utwórz listę">
+        <mat-icon>add</mat-icon>
+      </button>
+      <button type="button" class="m-r-20" mat-mini-fab color="accent" (click)="activateMany()" [disabled]="selection.selected.length === 0"
+        matTooltip="Zatwierdź" *ngIf="!isModerator()">
+        <mat-icon>checked</mat-icon>
+      </button>
+
+      <button type="button" mat-mini-fab color="warn" (click)="deleteMany()" [disabled]="selection.selected.length === 0" matTooltip="Usuń" *ngIf="!isModerator()">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+    <!-- /controls -->
+
+    <!-- filter -->
+    <mat-form-field fxFlex>
+      <input matInput (keyup)="applyFilter($event.target.value); $event.stopPropagation()" placeholder="Szukaj">
+    </mat-form-field>
+    <!-- /filter -->
+
+  </div>
+
+
+  <!-- spinner -->
+  <mat-card class="t-center p-t-50 p-b-50" fxFlex="100" fxFlex.sm="95" fxFlex.gt-sm="90" fxLayout="row" fxLayoutAlign="center center"
+    *ngIf="spinner">
+    <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+  </mat-card>
+  <!-- /spinner -->
+
+  <mat-card class="p-0" fxFlex="100" fxFlex.md="95" fxFlex.gt-md="90" fxLayout="row wrap" [hidden]="spinner">
+
+    <mat-table [dataSource]="lists" fxFlex="100" matSort>
+
+      <!-- select -->
+      <ng-container matColumnDef="select" *ngIf="!isModerator()">
+        <mat-header-cell *matHeaderCellDef class="mat-column-select" fxFlex="70px">
+          <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()">
+          </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row" class="mat-column-select" fxFlex="70px">
+          <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selectRow(row, true) : null" [checked]="selection.isSelected(row)">
+          </mat-checkbox>
+        </mat-cell>
+      </ng-container>
+      <!-- .select -->
+
+      <!-- delete -->
+      <ng-container matColumnDef="delete" *ngIf="isModerator()">
+        <mat-header-cell *matHeaderCellDef class="mat-column-select" fxFlex="70px">
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row" class="mat-column-select" fxFlex="70px">
+          <button mat-icon-button matTooltip="Usuń" (click)="selectRow(row, true); deleteMany(); $event.stopPropagation()" color="warn" *ngIf="isOwner(row)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+      <!-- .delete -->
+
+      <!-- edit -->
+      <ng-container matColumnDef="edit">
+        <mat-header-cell *matHeaderCellDef class="mat-column-select" fxFlex="70px">
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row" class="mat-column-select" fxFlex="70px">
+          <button mat-icon-button matTooltip="Edytuj" [routerLink]="'/dashboard/moderator/list/edit/' + row._id" color="primary" *ngIf="isOwner(row)">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+      <!-- .edit -->
+
+      <!-- list.status -->
+      <ng-container matColumnDef="active" *ngIf="!isModerator()">
+        <mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="130px"> Status </mat-header-cell>
+        <mat-cell *matCellDef="let element" fxFlex="130px">
+          <small *ngIf="!element.active" class="t-green">Nowa</small>
+          <small *ngIf="element.active">Sprawdzona</small>
+        </mat-cell>
+      </ng-container>
+      <!-- list.status -->
+
+      <!-- list.name -->
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Nazwa listy </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          {{ element.name }} / <small class="m-l-5 t-dark-gray">{{ element.owner }}</small>
+        </mat-cell>
+      </ng-container>
+      <!-- /list.name -->
+
+      <!-- list.company -->
+      <ng-container matColumnDef="count">
+        <mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="130px"> Ilość osób </mat-header-cell>
+        <mat-cell *matCellDef="let element" fxFlex="130px">
+          {{ element.members.length }}
+        </mat-cell>
+      </ng-container>
+      <!-- /list.company -->
+
+      <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: columns;" (click)="editList(row._id)" class="pointer"></mat-row>
+    </mat-table>
+    <mat-paginator [pageSize]="50" [pageSizeOptions]="[50, 100, 200]" [showFirstLastButtons]="true"></mat-paginator>
+  </mat-card>
+</div>

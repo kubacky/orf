@@ -1,0 +1,86 @@
+<div class="page-background bg-yellow"></div>
+<div fxLayout="row wrap" fxLayoutAlign="center">
+  <div class="p-t-20 p-b-20 p-l-10 p-r-10" fxFlex="100" fxFlex.md="95" fxFlex.gt-md="90" fxLayout="column" fxLayout.gt-xs="row"
+    fxLayoutAlign="space-between center">
+    <!-- controls -->
+    <div fxFlex="100" fxFlex.gt-xs="200px" *ngIf="!spinner">
+      <button type="button" (click)="save()" class="m-r-20" color="primary" [disabled]="listForm.invalid || listForm.get('members').controls.length === 0 || !listForm.get('agreement').value"
+       mat-fab matTooltip="Zapisz">
+        <mat-icon>save</mat-icon>
+      </button>
+      <button type="button" class="m-r-20" mat-mini-fab color="accent" routerLink="/dashboard/moderator/lists"
+        matTooltip="Anuluj">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <!-- /controls -->
+    <h3 *ngIf="isNew()">Edycja listy</h3>
+    <h3 *ngIf="!isNew()">Nowa lista</h3>
+  </div>
+
+  <!-- spinner -->
+  <mat-card class="t-center p-t-50 p-b-50" fxFlex="100" fxFlex.sm="95" fxFlex.gt-xs="90" fxLayout="row" fxLayoutAlign="center center"
+    *ngIf="spinner">
+    <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+  </mat-card>
+  <!-- /spinner -->
+
+  <mat-card fxFlex="100" fxFlex.gt-sm="90" fxLayout="row wrap" fxLayoutAlign="center center" class="m-b-40" *ngIf="!spinner">
+    <form [formGroup]="listForm" *ngIf="tickets" fxFlex="100">
+      <div fxFlex="100" fxLayout="row wrap"m>
+        <div fxFlex="100" fxLayout="row wrap" class="m-b-20" fxLayoutGap="10px">
+          <mat-form-field fxFlex="calc(70% - 10px)">
+            <input matInput type="text" matInput formControlName="name" placeholder="Nazwa" [required]="true">
+          </mat-form-field>
+          <mat-form-field fxFlex="calc(30% - 10px)">
+            <mat-select formControlName="type" placeholder="Rodzaj listy" [required]="true">
+              <mat-option *ngFor="let cat of categories" [value]="cat._id">{{ cat.name }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div fxFlex="100" formArrayName="members">
+          <div *ngFor="let member of listForm.get('members').controls; let i = index" [formGroup]="listForm.get('members').controls[i]"
+            fxLayout="row wrap" fxLayoutGap="10px">
+            <div class="t-center" fxFlex="40px">
+              <button class="p-t-10" type="button" mat-icon-button matTooltip="Usuń" color="warn" (click)="removeMember(i)" [disabled]="listForm.get('members').controls[i].disabled">
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+            <mat-form-field fxFlex.lt-sm="100" fxFlex>
+              <mat-label>Imię i nazwisko</mat-label>
+              <input type="text" formControlName="name" [required]="true" matInput>
+            </mat-form-field>
+            <mat-form-field fxFlex="100" fxFlex.gt-xs="30">
+              <mat-label>Rodzaj biletu</mat-label>
+              <input matInput type="text" formControlName="type" *ngIf="tickets.length === 1">
+              <mat-select formControlName="ticket" *ngIf="tickets.length > 1" [required]="true">
+                <mat-option *ngFor="let ticket of tickets" [value]="ticket._id">
+                  {{ ticket.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="100" fxFlex.gt-xs="25">
+              <mat-label>Informacje dodatkowe</mat-label>
+              <input type="text" formControlName="role" matInput>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div fxFlex="100" class="m-t-10 m-b-30">
+        <button (click)="addMember()" type="button" matTooltip="Dodaj kolejną osobę" mat-mini-fab color="accent">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+      <mat-divider></mat-divider>
+      <div class="p-t-30">
+        <button type="submit" color="primary" (click)="save()" [disabled]="listForm.invalid || listForm.get('members').controls.length === 0 || !listForm.get('agreement').value"
+          mat-raised-button>
+          Zapisz
+        </button>
+        <button type="button" class="m-l-10" color="accent" routerLink="/dashboard/moderator/lists" mat-button>
+          Anuluj
+        </button>
+      </div>
+    </form>
+  </mat-card>
+</div>

@@ -1,0 +1,9 @@
+<mat-sidenav-container>
+  <mat-sidenav #sidenav [mode]="'side'" opened>
+    <orf-sidebar></orf-sidebar>
+  </mat-sidenav>
+  <mat-sidenav-content class="relative">
+    <orf-toolbar [sidenav]="sidenav"></orf-toolbar>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

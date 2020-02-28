@@ -1,0 +1,13 @@
+<div fxLayout="row wrap" *ngIf="members">
+  <div fxFlex="100" class="h-300 m-t-50">
+    <ngx-charts-advanced-pie-chart [results]="members.advanced" [label]="'Wszystkie bilety'">
+
+    </ngx-charts-advanced-pie-chart>
+  </div>
+  <div *ngFor="let type of members.details" class="t-center h-200 m-b-20 chart-container" fxFlex="100" fxFlex.gt-sm="25">
+    <ngx-charts-pie-chart [results]="type.chart" [doughnut]="true" [scheme]="{domain: ['#888888', '#00a65a', '#1e88e5']}">
+      
+    </ngx-charts-pie-chart>
+    <h5>{{ type.name }}</h5>
+  </div>
+</div>

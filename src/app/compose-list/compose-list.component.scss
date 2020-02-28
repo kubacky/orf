@@ -1,0 +1,23 @@
+img {
+  width: 300px;
+}
+
+img.img-small {
+  width: 180px;
+}
+
+.register-box {
+  .type-box {
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    img {
+      width: 40%;
+      margin: 15px 0;
+    }
+  }
+}
+
+.checkbox .mat-checkbox-layout {
+  white-space: normal !important;
+}

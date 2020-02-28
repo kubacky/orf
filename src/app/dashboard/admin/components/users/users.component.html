@@ -1,0 +1,89 @@
+<div class="page-background bg-teal"></div>
+<div fxLayout="row wrap" fxLayoutAlign="center">
+  <div class="p-t-20 p-b-20 p-l-10 p-r-10" fxFlex="100" fxFlex.md="95" fxFlex.gt-md="90" fxLayout="column" fxLayout.gt-sm="row"
+    fxLayoutAlign="space-between center">
+
+    <!-- controls -->
+    <div fxFlex="100" fxFlex.gt-sm="200px">
+      <button type="button" (click)="addUser()" class="m-r-20" color="primary" mat-fab matTooltip="Utwórz użytkownika">
+        <mat-icon>add</mat-icon>
+      </button>
+      <button type="button" class="m-r-20" mat-mini-fab color="accent" (click)="activateMany()" [disabled]="selection.selected.length === 0" matTooltip="Aktywuj">
+        <mat-icon>checked</mat-icon>
+      </button>
+
+      <button type="button" mat-mini-fab color="warn" (click)="deleteMany()" [disabled]="selection.selected.length === 0" matTooltip="Usuń">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+    <!-- /controls -->
+
+    <!-- filter -->
+    <mat-form-field fxFlex>
+      <input matInput (keyup)="applyFilter($event.target.value); $event.stopPropagation()" placeholder="Szukaj">
+    </mat-form-field>
+    <!-- /filter -->
+
+  </div>
+  <mat-card class="p-0" fxFlex="100" fxFlex.md="95" fxFlex.gt-md="90" fxLayout="row wrap">
+
+    <mat-table #table [dataSource]="users" fxFlex="100" matSort>
+
+      <!-- select -->
+      <ng-container matColumnDef="select">
+        <mat-header-cell *matHeaderCellDef class="mat-column-select" fxFlex="70px">
+          <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()">
+          </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row" class="mat-column-select" fxFlex="70px">
+          <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selectRow(row, true) : null" [checked]="selection.isSelected(row)">
+          </mat-checkbox>
+        </mat-cell>
+      </ng-container>
+      <!-- .select -->
+
+      <!-- user.status -->
+      <ng-container matColumnDef="active">
+        <mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="130px"> Status </mat-header-cell>
+        <mat-cell *matCellDef="let element" fxFlex="130px">
+          <small *ngIf="element.active">Aktywny</small>
+          <small *ngIf="!element.active" class="t-red">Nieaktywny</small>
+        </mat-cell>
+      </ng-container>
+      <!-- user.status -->
+
+      <!-- user.name -->
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Imię i nazwisko </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          {{ element.name }}
+        </mat-cell>
+      </ng-container>
+      <!-- /user.name -->
+
+      <!-- user.company -->
+      <ng-container matColumnDef="permissions">
+        <mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="130px"> Uprawnienia</mat-header-cell>
+        <mat-cell *matCellDef="let element" fxFlex="130px">
+          <small *ngIf="element.permissions === 'admin'">Administrator</small>
+          <small *ngIf="element.permissions === 'moderator'">Moderator</small>
+          <small *ngIf="element.permissions === 'operator'">Kasa</small>
+          <small *ngIf="element.permissions === 'user'">Zwykły użytkownik</small>
+        </mat-cell>
+      </ng-container>
+      <!-- /user.company -->
+
+      <!-- user.company -->
+      <ng-container matColumnDef="company">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Firma / zespół</mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.company}} - <small class="t-dark-gray m-l-5">{{ element.type }}</small></mat-cell>
+      </ng-container>
+      <!-- /user.company -->
+
+      <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: columns;" (click)="editUser(row)" class="pointer"></mat-row>
+    </mat-table>
+    <mat-paginator #paginator [pageSize]="30" [pageSizeOptions]="[30, 50, 150]" [showFirstLastButtons]="true">
+    </mat-paginator>
+  </mat-card>
+</div>
